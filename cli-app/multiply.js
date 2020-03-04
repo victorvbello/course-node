@@ -23,13 +23,13 @@ const createFileTable = (base = 1, limit = 10) => {
     }
 
     const data =  makeTable(base, limit);
-
-    fs.writeFile(`files/table-${base}-limit-${limit}.txt`, data, error => {
+    const fileName = `table-${base}-limit-${limit}.txt`;
+    fs.writeFile(`files/${fileName}`, data, error => {
       if (error) {
         reject(error);
         return;
       }
-      resolve(`table-${base}-limit-${limit}.txt`);
+      resolve(fileName);
     });
   });
 };
