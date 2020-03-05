@@ -8,20 +8,20 @@ const defaultOptions = {
     demandOption: true,
     alias: 'b',
     default: 1,
-    describe: 'Base multiplicadora',
+    describe: 'Multiplier base',
   },
   limit: {
     alias: 'l',
     default: 10,
-    describe: 'Limite de la tabla de multiplicar desde el 1',
+    describe: 'Limit the multiplication table from 1',
   },
 };
 
 const argv = yargs
-  .command('list', 'Imprime en consola la tabla de multiplicar', defaultOptions)
+  .command('list', 'Print the multiplication table on the console', defaultOptions)
   .command(
     'create',
-    'Crea archivo txt con la tabla de multiplicar',
+    'Create txt file with the multiplication table',
     defaultOptions,
   )
   .help().argv;
@@ -35,19 +35,19 @@ const [firstCommand] = commands;
 switch (firstCommand) {
   case 'list':
     console.log(
-      colors.green(`Generando tabla de multiplicar del 1 al ${limit} de base ${base}`),
+      colors.green(`Generating multiplication table from 1 to ${limit} of base ${base}`),
     );
     listeTable(base, limit);
     break;
   case 'create':
     console.log(
-      colors.green(`Creando archivo de tabla de multiplicar del 1 al ${limit} de base ${base}`),
+      colors.green(`Creating file of multiplication table from 1 to ${limit} of base ${base}`),
     );
     createFileTable(base, limit)
-      .then(fileName => console.log(`Archivo creado: ${colors.green(fileName)}`))
+      .then(fileName => console.log(`File created: ${colors.green(fileName)}`))
       .catch(e => console.log(colors.red(e)));
     break;
   default:
-    console.log(colors.red('Comando invalido'));
+    console.log(colors.red('Invalid command'));
     break;
 }
