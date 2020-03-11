@@ -1,6 +1,10 @@
 const yargs = require('yargs');
 const colors = require('colors');
-const { create } = require('./to-do');
+const {
+  create: createTask,
+  all: listTask,
+  update: updateTask,
+} = require('./to-do');
 
 const argv = yargs
   .command('create', 'Add task to list', {
@@ -34,18 +38,30 @@ const [firstCommand] = commands;
 try {
   switch (firstCommand) {
     case 'create':
-      create(description);
       console.log(colors.green('Create task'));
+      createTask(description);
       break;
     case 'list':
       console.log(colors.green('Show all task'));
+      const tasks = listTask();
+      for (let task of tasks) {
+        const { description: taskDescription, complete: taskComplete } = task;
+        console.log(colors.green('============To Do==========='));
+        console.log(taskDescription);
+        console.log('Status: ', taskComplete);
+        console.log(colors.green('============================'));
+      }
       break;
     case 'update':
       console.log(colors.green('Update task'));
+      const result = updateTask(description, complete);
+      if(!result) {
+        throw new Error('Update Error', null);
+      }
+      console.log(colors.green('Update success'));
       break;
     default:
       throw new Error('Invalid command', null);
-      break;
   }
 } catch (e) {
   console.log(colors.red(e.message));
