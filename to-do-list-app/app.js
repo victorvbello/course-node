@@ -4,46 +4,50 @@ const {
   create: createTask,
   all: listTask,
   update: updateTask,
+  remove: removeTask,
 } = require('./to-do');
 
+const cliAttDescription = {
+  demandOption: true,
+  alias: 'd',
+  describe: 'Task description',
+};
+
+const cliAttComplete = {
+  alias: 'c',
+  default: true,
+  describe: 'Complete a task',
+};
+
 const argv = yargs
-  .command('create', 'Add task to list', {
-    description: {
-      demandOption: true,
-      alias: 'd',
-      describe: 'Task description',
-    },
+  .command('list', 'List all task', {
+    complete: cliAttComplete,
   })
-  .command('list', 'List all task', {})
+  .command('create', 'Add task to list', {
+    description: cliAttDescription,
+  })
+
   .command('update', 'Update task', {
-    description: {
-      demandOption: true,
-      alias: 'd',
-      describe: 'Task description',
-    },
-    complete: {
-      alias: 'c',
-      default: true,
-      describe: 'Complete a task',
-    },
+    description: cliAttDescription,
+    complete: cliAttComplete,
+  })
+  .command('remove', 'Remove task to list', {
+    description: cliAttDescription,
   })
   .help().argv;
 
 console.log(colors.green('To do app is running'));
 
 const { _: commands, description, complete } = argv;
+const safeComplete = (/true/i).test(complete);
 
 const [firstCommand] = commands;
 
 try {
   switch (firstCommand) {
-    case 'create':
-      console.log(colors.green('Create task'));
-      createTask(description);
-      break;
     case 'list':
       console.log(colors.green('Show all task'));
-      const tasks = listTask();
+      const tasks = listTask(safeComplete);
       for (let task of tasks) {
         const { description: taskDescription, complete: taskComplete } = task;
         console.log(colors.green('============To Do==========='));
@@ -52,13 +56,23 @@ try {
         console.log(colors.green('============================'));
       }
       break;
+    case 'create':
+      console.log(colors.green('Create task'));
+      createTask(description);
+      break;
     case 'update':
       console.log(colors.green('Update task'));
-      const result = updateTask(description, complete);
-      if(!result) {
+      if (!updateTask(description, safeComplete)) {
         throw new Error('Update Error', null);
       }
       console.log(colors.green('Update success'));
+      break;
+    case 'remove':
+      console.log(colors.green('Removed task'));
+      if (!removeTask(description)) {
+        throw new Error('Remove Error', null);
+      }
+      console.log(colors.green('Remove success'));
       break;
     default:
       throw new Error('Invalid command', null);

@@ -18,8 +18,13 @@ const loadDB = () => {
   }
 };
 
-const all = () => {
-  return loadDB();
+const all = (complete = false) => {
+  const list = loadDB();
+  const listFiltered = list.filter(task => {
+    const { complete: taskCompleted } = task;
+    return taskCompleted === complete;
+  });
+  return listFiltered;
 };
 
 const create = description => {
@@ -32,7 +37,7 @@ const create = description => {
   saveDB(toDoLis);
 };
 
-const update = (descriptionToUpdate, complete) => {
+const update = (descriptionToUpdate, complete = false) => {
   const toDoLis = loadDB();
   const updateIndex = toDoLis.findIndex(item => {
     const { description } = item;
@@ -46,8 +51,22 @@ const update = (descriptionToUpdate, complete) => {
   return true;
 };
 
+const remove = descriptionToUpdate => {
+  const toDoLis = loadDB();
+  const newList = toDoLis.filter(item => {
+    const { description } = item;
+    return description.toLowerCase() !== descriptionToUpdate.toLowerCase();
+  });
+  if (toDoLis.length !== newList.length) {
+    saveDB(newList);
+    return true;
+  }
+  return false;
+};
+
 module.exports = {
   all,
   create,
   update,
+  remove,
 };
