@@ -6,7 +6,18 @@ const User = require('../models/users');
 const app = express();
 
 app.get('/user', (req, res) => {
-  res.json('get users ');
+  const { query = {} } = req;
+  const { limit_form: limitFrom = 0, limit_to: limitTo = 5 } = query;
+
+  User.find({})
+    .skip(parseInt(limitFrom))
+    .limit(parseInt(limitTo))
+    .exec((error, result) => {
+      if (error) {
+        return res.status(400).json({ success: false, error: { ...error } });
+      }
+      res.json({ success: true, users: result });
+    });
 });
 
 app.get('/user/:id', (req, res) => {
@@ -16,7 +27,7 @@ app.get('/user/:id', (req, res) => {
 
 app.post('/user', (req, res) => {
   const { body = {} } = req;
-  const { name = '', email = '', password = '', role = '' } = body;
+  const { name, email, password, role } = body;
   const user = new User({
     name,
     email,
@@ -32,8 +43,16 @@ app.post('/user', (req, res) => {
 });
 
 app.put('/user/:id', (req, res) => {
-  const { id = 0 } = req.params;
-  res.json('put user ' + id);
+  const { body = {}, params = {} } = req;
+  const { id = '' } = params;
+  const { name, email, role, img, status } = body;
+  const finalData = { name, email, role, img, status };
+  User.findByIdAndUpdate(id, finalData, { new: true }, (error, result) => {
+    if (error) {
+      return res.status(400).json({ success: false, error: { ...error } });
+    }
+    res.json({ success: true, user: result });
+  });
 });
 
 app.delete('/user/:id', (req, res) => {
