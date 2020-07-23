@@ -4,6 +4,7 @@
   "description": "rest server with express",
   "main": "server/server.js",
   "scripts": {
+    "start": "node server/server.js",
     "dev": "nodemon server/server.js -e js,hbs,html,css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.9.25"
   }
 }
