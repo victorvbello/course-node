@@ -16,7 +16,11 @@ app.use(bodyParser.json());
 app.use(require('./routes/user'));
 
 mongoose
-  .connect('mongodb://localhost:27017/coffee', { useNewUrlParser: true })
+  .connect(process.env.URl_DB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log('Mongo is ONLINE');
   })
