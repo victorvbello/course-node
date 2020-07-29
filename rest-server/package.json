@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "rest server with express",
   "main": "server/server.js",
+  "engines": {
+    "node": "10.17.0"
+  },
   "scripts": {
     "start": "node server/server.js",
     "dev": "NODE_ENV=dev nodemon server/server.js -e js,hbs,html,css",
