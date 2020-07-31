@@ -1,6 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 
+const { validateToken } = require('../middlewares/authentication');
+
 const User = require('../models/users');
 
 const app = express();
@@ -74,8 +76,13 @@ const createUserHandle = (req, res) => {
 const updateUserHandle = (req, res) => {
   const { body = {}, params = {} } = req;
   const { id = '' } = params;
-  const { name, email, role, img, status } = body;
-  const finalData = { name, email, role, img, status };
+  const { name, email, role, img } = body;
+  const finalData = {
+    ...(name ? { name } : {}),
+    ...(email ? { email } : {}),
+    ...(role ? { role } : {}),
+    ...(img ? { img } : {}),
+  };
 
   User.findByIdAndUpdate(id, finalData, { new: true }, (error, result) => {
     if (error) {
@@ -92,11 +99,17 @@ const softDeleteUserHandle = (req, res) => {
     idToDelete,
     { status: false },
     { new: true },
-    (error, result) => {
+    (error, userDeleted) => {
       if (error) {
         return res.status(400).json({ success: false, error: { ...error } });
       }
-      res.json({ success: true, user: result });
+
+      if (!userDeleted) {
+        return res
+          .status(404)
+          .json({ success: false, error: { user: 'not found' } });
+      }
+      res.json({ success: true, user: userDeleted });
     },
   );
 };
@@ -118,11 +131,11 @@ const hardDeleteUserHandle = (req, res) => {
   });
 };
 
-app.get('/user', getUsersHandle);
-app.get('/user/:id', getUserHandle);
-app.post('/user', createUserHandle);
-app.put('/user/:id', updateUserHandle);
-app.delete('/user/:id', softDeleteUserHandle);
-app.delete('/user/hard-delete/:id', hardDeleteUserHandle);
+app.get('/user', validateToken, getUsersHandle);
+app.get('/user/:id', validateToken, getUserHandle);
+app.post('/user', validateToken, createUserHandle);
+app.put('/user/:id', validateToken, updateUserHandle);
+app.delete('/user/:id', validateToken, softDeleteUserHandle);
+app.delete('/user/hard-delete/:id', validateToken, hardDeleteUserHandle);
 
 module.exports = app;
