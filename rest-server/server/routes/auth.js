@@ -6,7 +6,7 @@ const User = require('../models/users');
 
 const app = express();
 
-app.post('/login', (req, res) => {
+const loginHandle = (req, res) => {
   const { body = {} } = req;
   const { email = '', password = '' } = body;
 
@@ -32,6 +32,8 @@ app.post('/login', (req, res) => {
     });
     res.json({ success: true, user: userDB, token });
   });
-});
+};
+
+app.post('/login', loginHandle);
 
 module.exports = app;

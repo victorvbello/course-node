@@ -5,7 +5,7 @@ const User = require('../models/users');
 
 const app = express();
 
-app.get('/user', (req, res) => {
+const getUsersHandle = (req, res) => {
   const { query = {} } = req;
   const {
     limit_form: limitFrom = 0,
@@ -34,9 +34,9 @@ app.get('/user', (req, res) => {
         res.json({ success: true, users: result, total });
       });
     });
-});
+};
 
-app.get('/user/:id', (req, res) => {
+const getUserHandle = (req, res) => {
   const { id = 0 } = req.params;
 
   User.findById(id, (error, userDB) => {
@@ -50,9 +50,9 @@ app.get('/user/:id', (req, res) => {
     }
     res.json({ success: true, user: userDB });
   });
-});
+};
 
-app.post('/user', (req, res) => {
+const createUserHandle = (req, res) => {
   const { body = {} } = req;
   const { name, email, password, role } = body;
 
@@ -69,9 +69,9 @@ app.post('/user', (req, res) => {
     }
     res.json({ success: true, user: result });
   });
-});
+};
 
-app.put('/user/:id', (req, res) => {
+const updateUserHandle = (req, res) => {
   const { body = {}, params = {} } = req;
   const { id = '' } = params;
   const { name, email, role, img, status } = body;
@@ -83,9 +83,9 @@ app.put('/user/:id', (req, res) => {
     }
     res.json({ success: true, user: result });
   });
-});
+};
 
-app.delete('/user/:id', (req, res) => {
+const softDeleteUserHandle = (req, res) => {
   const { params: { id: idToDelete = '' } = {} } = req;
 
   User.findByIdAndUpdate(
@@ -99,9 +99,9 @@ app.delete('/user/:id', (req, res) => {
       res.json({ success: true, user: result });
     },
   );
-});
+};
 
-app.delete('/user/hard-delete/:id', (req, res) => {
+const hardDeleteUserHandle = (req, res) => {
   const { params: { id: idToDelete = '' } = {} } = req;
 
   User.findByIdAndRemove(idToDelete, (error, userDeleted) => {
@@ -116,6 +116,13 @@ app.delete('/user/hard-delete/:id', (req, res) => {
     }
     res.json({ success: true, user: userDeleted });
   });
-});
+};
+
+app.get('/user', getUsersHandle);
+app.get('/user/:id', getUserHandle);
+app.post('/user', createUserHandle);
+app.put('/user/:id', updateUserHandle);
+app.delete('/user/:id', softDeleteUserHandle);
+app.delete('/user/hard-delete/:id', hardDeleteUserHandle);
 
 module.exports = app;
