@@ -25,7 +25,7 @@ app.get('/user', (req, res) => {
           .json({ success: false, error: { ...listError } });
       }
 
-      User.count(queryCondition, (countError, total) => {
+      User.countDocuments(queryCondition, (countError, total) => {
         if (countError) {
           return res
             .status(400)
@@ -38,7 +38,18 @@ app.get('/user', (req, res) => {
 
 app.get('/user/:id', (req, res) => {
   const { id = 0 } = req.params;
-  res.json('get user ' + id);
+
+  User.findById(id, (error, userDB) => {
+    if (error) {
+      return res.status(400).json({ success: false, error: { ...error } });
+    }
+    if (!userDB) {
+      return res
+        .status(404)
+        .json({ success: false, error: { user: 'not found' } });
+    }
+    res.json({ success: true, user: userDB });
+  });
 });
 
 app.post('/user', (req, res) => {
