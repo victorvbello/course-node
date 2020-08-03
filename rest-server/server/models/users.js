@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
+const { USER_ROLE, ADMIN_ROLE } = require('../constants/roles');
+
 const validRoles = {
-  values: ['ADMIN_ROLE', 'USER_ROLE'],
+  values: [USER_ROLE, ADMIN_ROLE],
   message: '{VALUE}, not is a valid role'
 }
 
@@ -28,7 +30,7 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    default: 'USER_ROLE',
+    default: USER_ROLE,
     enum: validRoles,
   },
   status: {

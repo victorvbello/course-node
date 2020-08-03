@@ -18,13 +18,13 @@ const loginHandle = (req, res) => {
     if (!userDB) {
       return res
         .status(401)
-        .json({ success: false, error: { user: '-email / password invalid' } });
+        .json({ success: false, error: { user: 'email / password invalid' } });
     }
 
     if (!bcrypt.compareSync(password, userDB.password)) {
       return res
         .status(401)
-        .json({ success: false, error: { user: 'email / -password invalid' } });
+        .json({ success: false, error: { user: 'email / password invalid' } });
     }
 
     const token = jwt.sign({ user: userDB }, process.env.TOKEN_SECRET, {

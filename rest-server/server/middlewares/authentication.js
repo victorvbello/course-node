@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 
+const { USER_ROLE, ADMIN_ROLE } = require('../constants/roles');
+
 // VALIDATE TOKEN
 
 const validateToken = (req, res, next) => {
@@ -26,6 +28,20 @@ const validateToken = (req, res, next) => {
   });
 };
 
+const validateAdminRole = (req, res, next) => {
+  const { locales: { user: { role = '' } = {} } = {} } = res;
+
+  if (role !== ADMIN_ROLE) {
+    return res.status(401).json({
+      success: false,
+      error: 'not admin user',
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   validateToken,
+  validateAdminRole,
 };

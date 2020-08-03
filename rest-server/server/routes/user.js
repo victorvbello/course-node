@@ -1,7 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 
-const { validateToken } = require('../middlewares/authentication');
+const {
+  validateToken,
+  validateAdminRole,
+} = require('../middlewares/authentication');
 
 const User = require('../models/users');
 
@@ -76,10 +79,11 @@ const createUserHandle = (req, res) => {
 const updateUserHandle = (req, res) => {
   const { body = {}, params = {} } = req;
   const { id = '' } = params;
-  const { name, email, role, img } = body;
+  const { name, email, role, img, password } = body;
   const finalData = {
     ...(name ? { name } : {}),
     ...(email ? { email } : {}),
+    ...(password ? { password } : {}),
     ...(role ? { role } : {}),
     ...(img ? { img } : {}),
   };
@@ -133,9 +137,9 @@ const hardDeleteUserHandle = (req, res) => {
 
 app.get('/user', validateToken, getUsersHandle);
 app.get('/user/:id', validateToken, getUserHandle);
-app.post('/user', validateToken, createUserHandle);
-app.put('/user/:id', validateToken, updateUserHandle);
-app.delete('/user/:id', validateToken, softDeleteUserHandle);
-app.delete('/user/hard-delete/:id', validateToken, hardDeleteUserHandle);
+app.post('/user', [validateToken, validateAdminRole], createUserHandle);
+app.put('/user/:id', [validateToken, validateAdminRole], updateUserHandle);
+app.delete('/user/:id', [validateToken, validateAdminRole], softDeleteUserHandle);
+app.delete('/user/hard-delete/:id', [validateToken, validateAdminRole], hardDeleteUserHandle);
 
 module.exports = app;
