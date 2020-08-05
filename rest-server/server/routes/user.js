@@ -51,7 +51,7 @@ const getUserHandle = (req, res) => {
     if (!userDB) {
       return res
         .status(404)
-        .json({ success: false, error: { user: 'not found' } });
+        .json({ success: false, error: { message: 'not found' } });
     }
     res.json({ success: true, user: userDB });
   });
@@ -111,7 +111,7 @@ const softDeleteUserHandle = (req, res) => {
       if (!userDeleted) {
         return res
           .status(404)
-          .json({ success: false, error: { user: 'not found' } });
+          .json({ success: false, error: { message: 'not found' } });
       }
       res.json({ success: true, user: userDeleted });
     },
@@ -129,7 +129,7 @@ const hardDeleteUserHandle = (req, res) => {
     if (!userDeleted) {
       return res
         .status(404)
-        .json({ success: false, error: { user: 'not found' } });
+        .json({ success: false, error: { message: 'not found' } });
     }
     res.json({ success: true, user: userDeleted });
   });

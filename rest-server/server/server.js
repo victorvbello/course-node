@@ -3,6 +3,7 @@ require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const hbs = require('hbs');
 
 const app = express();
 
@@ -12,8 +13,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+//add logger
+app.use(require('./middlewares/logger'));
+
 // config routes
 app.use(require('./routes/index.js'));
+
+// enabled view dir
+app.set('view engine', 'hbs');
+
+app.get('/google-login', (req, res) => {
+  res.render('google-login', {
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+  });
+});
 
 mongoose
   .connect(process.env.URl_DB, {
