@@ -20,7 +20,7 @@ process.env.TOKEN_SECRET = process.env.TOKEN_SECRET || 'aRtqmhw9c2jP8U53';
 
 // TOKEN EXPIRES
 
-process.env.TOKEN_EXPIRES = 60 * 60 * 24 * 30;
+process.env.TOKEN_EXPIRES = '30day';
 
 // GOOGLE CLIENT ID
 

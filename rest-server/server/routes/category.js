@@ -6,11 +6,15 @@ const {
 } = require('../middlewares/authentication');
 
 const Category = require('../models/categories');
+const { populate } = require('../models/categories');
 
 const app = express();
 
 const getCategoriesHandle = (req, res) => {
-  Category.find({}, (error, result) => {
+  Category.find({})
+    .sort('description')
+    .populate('user', 'name email')
+    .exec((error, result) => {
     if (error) {
       return res.status(400).json({ success: false, error });
     }
@@ -31,7 +35,7 @@ const getCategoryHandle = (req, res) => {
         .status(404)
         .json({ success: false, error: { message: 'not found' } });
     }
-    res.json({ success: true, category: categoryDB });
+    return res.json({ success: true, category: categoryDB });
   });
 };
 
@@ -48,7 +52,7 @@ const createCategoryHandle = (req, res) => {
     if (error) {
       return res.status(400).json({ success: false, error: { ...error } });
     }
-    res.json({ success: true, category: result });
+    return res.json({ success: true, category: result });
   });
 };
 
@@ -59,12 +63,12 @@ const updateCategoryHandle = (req, res) => {
   Category.findByIdAndUpdate(
     idToUpdate,
     { description },
-    { new: true },
+    { new: true, runValidators: true, context: 'query' },
     (error, result) => {
       if (error) {
         return res.status(400).json({ success: false, error: { ...error } });
       }
-      res.json({ success: true, category: result });
+      return res.json({ success: true, category: result });
     },
   );
 };
@@ -82,7 +86,7 @@ const deleteCategoryHandle = (req, res) => {
         .status(404)
         .json({ success: false, error: { message: 'not found' } });
     }
-    res.json({ success: true, category: categoryDeleted });
+    return res.json({ success: true, category: categoryDeleted });
   });
 };
 

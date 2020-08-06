@@ -53,7 +53,7 @@ const getUserHandle = (req, res) => {
         .status(404)
         .json({ success: false, error: { message: 'not found' } });
     }
-    res.json({ success: true, user: userDB });
+    return res.json({ success: true, user: userDB });
   });
 };
 
@@ -72,7 +72,7 @@ const createUserHandle = (req, res) => {
     if (error) {
       return res.status(400).json({ success: false, error: { ...error } });
     }
-    res.json({ success: true, user: result });
+    return res.json({ success: true, user: result });
   });
 };
 
@@ -88,12 +88,17 @@ const updateUserHandle = (req, res) => {
     ...(img ? { img } : {}),
   };
 
-  User.findByIdAndUpdate(id, finalData, { new: true }, (error, result) => {
-    if (error) {
-      return res.status(400).json({ success: false, error: { ...error } });
-    }
-    res.json({ success: true, user: result });
-  });
+  User.findByIdAndUpdate(
+    id,
+    finalData,
+    { new: true, runValidators: true, context: 'query' },
+    (error, result) => {
+      if (error) {
+        return res.status(400).json({ success: false, error: { ...error } });
+      }
+      return res.json({ success: true, user: result });
+    },
+  );
 };
 
 const softDeleteUserHandle = (req, res) => {
@@ -113,7 +118,7 @@ const softDeleteUserHandle = (req, res) => {
           .status(404)
           .json({ success: false, error: { message: 'not found' } });
       }
-      res.json({ success: true, user: userDeleted });
+      return res.json({ success: true, user: userDeleted });
     },
   );
 };
@@ -131,7 +136,7 @@ const hardDeleteUserHandle = (req, res) => {
         .status(404)
         .json({ success: false, error: { message: 'not found' } });
     }
-    res.json({ success: true, user: userDeleted });
+    return res.json({ success: true, user: userDeleted });
   });
 };
 
@@ -139,7 +144,15 @@ app.get('/user', validateToken, getUsersHandle);
 app.get('/user/:id', validateToken, getUserHandle);
 app.post('/user', [validateToken, validateAdminRole], createUserHandle);
 app.put('/user/:id', [validateToken, validateAdminRole], updateUserHandle);
-app.delete('/user/:id', [validateToken, validateAdminRole], softDeleteUserHandle);
-app.delete('/user/hard-delete/:id', [validateToken, validateAdminRole], hardDeleteUserHandle);
+app.delete(
+  '/user/:id',
+  [validateToken, validateAdminRole],
+  softDeleteUserHandle,
+);
+app.delete(
+  '/user/hard-delete/:id',
+  [validateToken, validateAdminRole],
+  hardDeleteUserHandle,
+);
 
 module.exports = app;
