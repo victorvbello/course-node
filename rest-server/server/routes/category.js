@@ -71,6 +71,11 @@ const updateCategoryHandle = (req, res) => {
       if (error) {
         return res.status(400).json({ success: false, error: { ...error } });
       }
+      if (!result) {
+        return res
+          .status(404)
+          .json({ success: false, error: { message: 'not found' } });
+      }
       return res.json({ success: true, category: result });
     },
   );
