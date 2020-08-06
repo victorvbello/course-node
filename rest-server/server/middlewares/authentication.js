@@ -22,7 +22,7 @@ const validateToken = (req, res, next) => {
       user,
     };
 
-    res.locales = locales;
+    req.locales = locales;
 
     next();
   });

@@ -6,7 +6,6 @@ const {
 } = require('../middlewares/authentication');
 
 const Category = require('../models/categories');
-const { populate } = require('../models/categories');
 
 const app = express();
 
@@ -15,33 +14,37 @@ const getCategoriesHandle = (req, res) => {
     .sort('description')
     .populate('user', 'name email')
     .exec((error, result) => {
-    if (error) {
-      return res.status(400).json({ success: false, error });
-    }
+      if (error) {
+        return res.status(400).json({ success: false, error });
+      }
 
-    return res.json({ success: true, categories: result });
-  });
+      return res.json({ success: true, categories: result });
+    });
 };
 
 const getCategoryHandle = (req, res) => {
   const { params: { id = '' } = {} } = req;
 
-  Category.findById(id, (error, categoryDB) => {
-    if (error) {
-      return res.status(400).json({ success: false, error });
-    }
-    if (!categoryDB) {
-      return res
-        .status(404)
-        .json({ success: false, error: { message: 'not found' } });
-    }
-    return res.json({ success: true, category: categoryDB });
-  });
+  Category.findById(id)
+    .populate('user', 'name email')
+    .exec((error, categoryDB) => {
+      if (error) {
+        return res.status(400).json({ success: false, error });
+      }
+      if (!categoryDB) {
+        return res
+          .status(404)
+          .json({ success: false, error: { message: 'not found' } });
+      }
+      return res.json({ success: true, category: categoryDB });
+    });
 };
 
 const createCategoryHandle = (req, res) => {
-  const { body: { description } = {} } = req;
-  const { locales: { user: { _id: userId = '' } = {} } = {} } = res;
+  const {
+    body: { description } = {},
+    locales: { user: { _id: userId = '' } = {} } = {},
+  } = req;
 
   const category = new Category({
     description,
