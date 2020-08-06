@@ -36,7 +36,7 @@ const getUsersHandle = (req, res) => {
             .status(400)
             .json({ success: false, error: { ...countError } });
         }
-        res.json({ success: true, users: result, total });
+        return res.json({ success: true, users: result, total });
       });
     });
 };
@@ -46,7 +46,7 @@ const getUserHandle = (req, res) => {
 
   User.findById(id, (error, userDB) => {
     if (error) {
-      return res.status(400).json({ success: false, error: { ...error } });
+      return res.status(400).json({ success: false, error });
     }
     if (!userDB) {
       return res
