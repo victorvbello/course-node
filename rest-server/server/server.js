@@ -3,7 +3,6 @@ require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const hbs = require('hbs');
 
 const app = express();
 
@@ -13,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-//add logger
+// add logger
 app.use(require('./middlewares/logger'));
 
 // config routes

@@ -10,5 +10,7 @@ app.use(require('./user'));
 app.use(require('./category'));
 // product routes
 app.use(require('./product'));
+// uploads routes
+app.use(require('./file'));
 
 module.exports = app;

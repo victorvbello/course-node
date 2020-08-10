@@ -41,7 +41,23 @@ const validateAdminRole = (req, res, next) => {
   next();
 };
 
+const validateTokenUrl = (req, res, next) => {
+  const { query: { token = '' } = {} } = req;
+
+  jwt.verify(token, process.env.TOKEN_SECRET, (error, result) => {
+    if (error) {
+      return res.status(401).json({
+        success: false,
+        error: 'invalid token',
+      });
+    }
+
+    next();
+  });
+};
+
 module.exports = {
   validateToken,
   validateAdminRole,
+  validateTokenUrl,
 };

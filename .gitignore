@@ -3,3 +3,5 @@ node_modules
 cli-app/files/*
 to-do-list-app/db.json
 .env
+**/tmp
+**/uploads

@@ -21,7 +21,11 @@
 	  "dateTime.showDayOfMonth": true,
 	  "dateTime.showDayOfWeek": true,
 	  "dateTime.showMonth": true,
-	  "dateTime.padDays": true,
+	"dateTime.padDays": true,
+	"cSpell.words": [
+		"Mimetype",
+		"fileupload"
+	],
 	}
   }
   
