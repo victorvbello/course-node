@@ -1,0 +1,50 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket</title>
+</head>
+
+<body>
+
+    <h1>Socket</h1>
+
+    <button onclick=sendToAll()>sendToAll</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        const socket = io();
+
+        socket.on('connect', () => {
+            console.log('Server connection On');
+        });
+
+        socket.on('server_info', (message = {}) => {
+            console.log('server:', message);
+        })
+
+        socket.on('disconnect', () => {
+            console.log('Server connection Off');
+        });
+
+        socket.emit('send_message', {
+            name: Math.random() >= 0.5 ? 'Snow' : 'Hot', message: 'hello'
+        }, (response) => {
+            console.log('send_message response:', response);
+        })
+
+        socket.on('send_all_message', (message = {}) => {
+            console.log('broadcast:', message);
+        });
+
+        function sendToAll() {
+            socket.emit('send_all_message', {
+                name: 'Snow', message: 'hi to all'
+            })
+        }
+    </script>
+</body>
+
+</html>
