@@ -1,0 +1,17 @@
+{
+  "name": "tail-system",
+  "version": "1.0.0",
+  "description": "manage of tail using socket and express",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js -e js,html,css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Bello",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}

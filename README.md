@@ -5,3 +5,4 @@
 - **WEB SERVER**:  Web server node with express and HBS [web-server](web-server/server.js)
 - **REST SERVER**:  REST server node with express [rest-server](rest-server/server/server.js)
 - **SOCKET BASIC**:  Socket server node with express [socket-basic](socket-basic/server/server.js)
+- **TAIL SYSTEM**:  Manage of tail using socket and express [tail-system](tail-system/server/server.js)
