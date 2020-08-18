@@ -12,13 +12,15 @@
 </head>
 
 <body class="container">
-    <h1>Desktop</h1>
-    <h4>By calling <small>....</small></h4>
+    <h1>Desktop <span id='desktop-number'></span></h1>
+    <h4>By calling <small id="current-call">....</small></h4>
 
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" id="call-next">
         Calling the next ticket
     </button>
 
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/desktop.js"></script>
 
 </body>
 

@@ -11,6 +11,11 @@ const initSocket = () => {
   socket.on('disconnect', () => {
     console.log('Socket:', 'Connection Off');
   });
+
+  socket.on('current-ticket', (message = {}) => {
+    const { current = '' } = message;
+    labelNewTicket.innerHTML = current;
+  });
 };
 
 newTicketButton.addEventListener('click', () => {
