@@ -19,39 +19,20 @@
 
     <table>
         <tr>
-            <td valign="middle" class="current-ticket">
-                <span id="lbl-ticket-1" class="new-current-ticket">Ticket W</span>
+            <td valign="middle" class="current-ticket col-8">
+                <span id="lbl-current-ticket" class="new-current-ticket"></span>
                 <br>
-                <span id="lbl-desktop-1" class="desktop-current-ticket">Desktop W</span>
+                <span id="lbl-current-desktop" class="desktop-current-ticket"></span>
             </td>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            <span id="lbl-ticket-2" class="secondary-ticket">Ticket X</span>
-                            <br>
-                            <span id="lbl-desktop-2">Desktop X</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span id="lbl-ticket-3" class="secondary-ticket">Ticket X</span>
-                            <br>
-                            <span id="lbl-desktop-3">Desktop X</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span id="lbl-ticket-4" class="secondary-ticket">Ticket X</span>
-                            <br>
-                            <span id="lbl-desktop-4">Desktop X</span>
-                        </td>
-                    </tr>
-                </table>
+            <td class="col-4">
+                <table class="list-ticket"></table>
             </td>
         </tr>
     </table>
 
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/public.js"></script>
 
 </body>
 

@@ -4,7 +4,7 @@
   "description": "manage of tail using socket and express",
   "main": "server/server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server/server.js",
     "dev": "nodemon server.js -e js,html,css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

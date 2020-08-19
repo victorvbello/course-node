@@ -28,6 +28,9 @@ module.exports = (IO) => {
       }
       const ticket = counterTicket.takeTicket(desktop);
       callback(ticket);
+      client.broadcast.emit('taken-tickets', {
+        takenTickets: counterTicket.getTakenTickets(),
+      });
     });
   });
 };

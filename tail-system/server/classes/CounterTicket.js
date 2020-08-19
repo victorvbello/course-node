@@ -7,7 +7,7 @@ class CounterTicket {
     this.lastTicket = 0;
     this.currentDate = this.getDate();
     this.tickets = [];
-    this.takeTickets = [];
+    this.takenTickets = [];
     this.reloadCount();
   }
   nextTicket() {
@@ -22,6 +22,10 @@ class CounterTicket {
     this.logging('currentTicket');
     return `Ticket ${this.lastTicket}`;
   }
+  getTakenTickets() {
+    this.logging('geTakenTickets');
+    return this.takenTickets;
+  }
   takeTicket(desktop = 0) {
     if (!this.tickets.length) {
       return 'Without Tickets';
@@ -30,9 +34,9 @@ class CounterTicket {
     this.tickets.shift();
     const { number = 0 } = firstTicket;
     const ticket = new Ticket(number, desktop);
-    this.takeTickets.unshift(ticket);
-    if (this.takeTickets.length > 4) {
-      this.takeTickets.splice(-1, 1);
+    this.takenTickets.unshift(ticket);
+    if (this.takenTickets.length > 4) {
+      this.takenTickets.splice(-1, 1);
     }
 
     this.saveCount();
@@ -48,14 +52,14 @@ class CounterTicket {
       lastTicket = 0,
       currentDate = 0,
       tickets = [],
-      takeTickets = [],
+      takenTickets = [],
     } = JSON.parse(stringData || {});
     this.logging('load');
     return {
       lastTicket,
       currentDate: currentDate || this.getDate(),
       tickets: Array.isArray(tickets) ? tickets : [],
-      takeTickets: Array.isArray(takeTickets) ? takeTickets : [],
+      takenTickets: Array.isArray(takenTickets) ? takenTickets : [],
     };
   }
   saveCount() {
@@ -70,12 +74,12 @@ class CounterTicket {
       lastTicket = 0,
       currentDate = 0,
       tickets = [],
-      takeTickets = [],
+      takenTickets = [],
     } = this.loadCount();
     if (currentDate === this.currentDate) {
       this.lastTicket = lastTicket;
       this.tickets = tickets;
-      this.takeTickets = takeTickets;
+      this.takenTickets = takenTickets;
       return;
     }
     this.saveCount();
@@ -90,7 +94,7 @@ class CounterTicket {
       lastTicket: this.lastTicket,
       currentDate: this.currentDate,
       tickets: this.tickets,
-      takeTickets: this.takeTickets,
+      takenTickets: this.takenTickets,
     };
   }
   logging(message = '') {
