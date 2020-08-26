@@ -23,7 +23,7 @@ module.exports = (IO) => {
       const { name: userName = '', room = '' } = userRemoved;
       client.broadcast.to(room).emit(NEW_MESSAGE, {
         success: true,
-        ...makeChatMessage('Admin', `${userName} left chat`),
+        ...makeChatMessage('Admin', `${userName} left chat`, true),
       });
       client.broadcast.to(room).emit(USER_LIST, {
         success: true,
@@ -35,20 +35,24 @@ module.exports = (IO) => {
     const handleChatSigning = (newUser = {}, callback = () => {}) => {
       const { name: userName = '', room = '' } = newUser;
       if (!userName) {
-        return callback({ success: false, message: 'User name is required' });
+        return callback({ success: false, error: 'User name is required' });
       }
       if (!room) {
-        return callback({ success: false, message: 'Room is required' });
+        return callback({ success: false, error: 'Room is required' });
       }
       client.join(room);
       const user = new User(client.id, userName, room);
       UserModel.add(user);
       const users = UserModel.all();
       client.broadcast.to(room).emit(USER_LIST, { success: true, users });
+      client.broadcast.to(room).emit(NEW_MESSAGE, {
+        success: true,
+        ...makeChatMessage('Admin', `${userName} join chat`, true),
+      });
       callback({ success: true, users });
     };
 
-    const handleNewMessage = (data = {}) => {
+    const handleNewMessage = (data = {}, callback = () => {}) => {
       const { to = '', message = '' } = data;
       const user = UserModel.findBySocketId(client.id);
       const { name: userName = '', room = '' } = user;
@@ -58,9 +62,11 @@ module.exports = (IO) => {
       };
       if (!to) {
         client.broadcast.to(room).emit(NEW_MESSAGE, body);
+        callback(body);
         return;
       }
       client.broadcast.to(to).emit(NEW_MESSAGE, body);
+      callback(body);
     };
 
     client.on(DISCONNECT, handleDisconnect);
