@@ -8,3 +8,4 @@
 - **SOCKET BASIC**: Socket server node with express [socket-basic](socket-basic/server/server.js)
 - **TAIL SYSTEM**: Manage of tail using socket and express [tail-system](tail-system/server/server.js)
 - **CHAT**: Chat using socket and express [socket-chat](socket-chat/server/server.js)
+- **TS-MYSQL**: Express server using typescript and mysql [ts-mysql](ts-mysql/index.ts)

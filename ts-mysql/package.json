@@ -1,0 +1,23 @@
+{
+  "name": "ts-mysql",
+  "version": "1.0.0",
+  "description": "Express server using typescript and mysql",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc",
+    "copy-public-file": "copyfiles -u 1 src/public/*.html dist",
+    "build":"tsc && npm run copy-public-file ",
+    "dev": "npm run build && nodemon ./dist/index"
+  },
+  "author": "Victor Bello",
+  "license": "ISC",
+  "dependencies": {
+    "copyfiles": "^2.3.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.7",
+    "typescript": "^4.0.2"
+  }
+}

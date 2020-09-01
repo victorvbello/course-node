@@ -5,3 +5,4 @@ to-do-list-app/db.json
 .env
 **/tmp
 **/uploads
+*/dist

@@ -24,6 +24,7 @@
 	"dateTime.padDays": true,
 	"cSpell.words": [
 		"Mimetype",
+		"copyfiles",
 		"fileupload"
 	],
 	}
